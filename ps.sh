@@ -6,14 +6,14 @@ clk_tck=$(getconf CLK_TCK)
 
 echo "PID||TTY||STAT||TIME||COMMAND"
 
-for pid in $(ls -l /proc | awk '{print $9}' | grep "^[0-9]*[0-9]$"| sort -n );
+for pid in $(ls -l /proc | awk '{print $9}' | grep -s "^[0-9]*[0-9]$"| sort -n );
 do
 
-tty=$(cat /proc/$pid/stat | awk '{print $7}')
-stat=$(cat /proc/$pid/stat | awk '{print $3}')
-utime=$(cat /proc/$pid/stat | awk '{print $14}')
-stime=$(cat  /proc/$pid/stat | awk '{print $17}')
-cmd=$(cat /proc/$pid/cmdline | awk '{print $0}')
+tty=$(cat 2>/dev/null /proc/$pid/stat | awk '{print $7}')
+stat=$(cat 2>/dev/null /proc/$pid/stat | awk '{print $3}')
+utime=$(cat 2>/dev/null /proc/$pid/stat | awk '{print $14}')
+stime=$(cat  2>/dev/null /proc/$pid/stat | awk '{print $17}')
+cmd=$(cat 2>/dev/null /proc/$pid/cmdline | awk '{print $0}')
 
 ttime=$((utime + stime))
 time=$((ttime / clk_tck))
